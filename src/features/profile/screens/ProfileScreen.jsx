@@ -6,7 +6,7 @@ import Input from "../../../shared/components/Input.jsx";
 import Button from "../../../shared/components/Button.jsx";
 import { Card } from "../../../shared/components/Common.jsx";
 import { useAuthStore } from "../../../shared/store/authStore.js";
-import avatarDefault from "../../../../assets/avatarDefault.png";
+import avatarDefault from "../../../../assets/logo.png";
 
 const ProfileScreen = () => {
     const { user, logout } = useAuthStore();
