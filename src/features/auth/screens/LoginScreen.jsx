@@ -41,7 +41,6 @@ const LoginScreen = ({ navigation }) => {
                 style={styles.container}
             >
                 <ScrollView contentContainerStyle={styles.scrollContent}>
-                    {/* Contenedor central (Tu "Card" de la imagen) */}
                     <View style={styles.card}>
                         <Image source={logo} style={styles.logo} resizeMode="contain" />
                         
@@ -71,7 +70,7 @@ const LoginScreen = ({ navigation }) => {
                                 <Input
                                     label="Contraseña"
                                     placeholder="••••••••"
-                                    secureTextEntry
+                                    secureTextEntry={true}
                                     onChangeText={onChange}
                                     value={value}
                                     autoCapitalize="none"

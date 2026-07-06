@@ -1,5 +1,5 @@
 import { NavigationContainer } from "@react-navigation/native";
-import { View, ActivityIndicator, StyleSheet } from "react-native";
+import { View, ActivityIndicator, StyleSheet, Text } from "react-native";
 import { COLORS } from "../shared/constants/theme.js";
 import AuthStack from "./AuthStack.jsx";
 import MainTabs from "./MainTabs.jsx";

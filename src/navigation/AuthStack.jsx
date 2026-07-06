@@ -9,8 +9,6 @@ const AuthStack = () => {
         <Stack.Navigator
             screenOptions={{
                 headerShown: false,
-                // Opcional: Esto ayuda a que en Android la transición se sienta más nativa
-                animation: "slide_from_right", 
             }}
         >
             <Stack.Screen name="Login" component={LoginScreen} />

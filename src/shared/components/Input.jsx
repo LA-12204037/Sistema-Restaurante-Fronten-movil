@@ -11,8 +11,8 @@ const Input = ({ label, error, style, ...props }) => {
             <TextInput
                 style={[
                     styles.input,
-                    isFocused && styles.inputFocused, 
-                    error && styles.inputError,
+                    isFocused ? styles.inputFocused : null, 
+                    error ? styles.inputError : null,
                     style
                 ]}
                 placeholderTextColor={COLORS.textLight}

@@ -1,10 +1,10 @@
 export const ENDPOINTS = {
     // Configuración para el backend de Papaluigi (auth y admin comparten base)
-    AUTH: import.meta.env.VITE_AUTH_URL || "http://localhost:5277",
+    AUTH: process.env.EXPO_PUBLIC_AUTH_URL || "http://localhost:5277",
     
-    // Si necesitas separar la lógica de admin o usar la base de papaluigi:
-    PAPALUIGI: import.meta.env.VITE_ADMIN_URL || "http://localhost:3001/papaluigi/v1",
+    // API principal de Papa Luigi
+    PAPALUIGI: process.env.EXPO_PUBLIC_ADMIN_URL || "http://localhost:3001/papaluigi/v1",
     
-    // Mantengo la referencia al endpoint de usuario anterior por si la necesitas
-    USER: import.meta.env.EXPO_PUBLIC_USER_URL || "http://localhost:3003/kinalSportsUser/v1"
+    // Alias para compatibilidad con código existente
+    USER: process.env.EXPO_PUBLIC_USER_URL || "http://localhost:3001/papaluigi/v1"
 };

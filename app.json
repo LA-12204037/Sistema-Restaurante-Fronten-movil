@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "client-user",
-    "slug": "client-user",
+    "name": "papa-luigi-mobile",
+    "slug": "papa-luigi-mobile",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/logo.png",

@@ -1,3 +1,4 @@
+import React from "react";
 import {
     View,
     Text,
@@ -7,7 +8,7 @@ import {
     Platform,
     ScrollView,
     Alert,
-    ImageBackground // 1. Importamos ImageBackground
+    ImageBackground
 } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
@@ -16,21 +17,30 @@ import Input from "../../../shared/components/Input";
 import Button from "../../../shared/components/Button";
 import { useAuth } from "../hooks/useAuth";
 
-// Importamos tus nuevos assets
 import logo from "../../../../assets/logo.png";
 import fondo from "../../../../assets/loginfondo.png";
 
-const LoginScreen = ({ navigation }) => {
-    const { handleLogin, loading } = useAuth();
+const RegisterScreen = ({ navigation }) => {
+    const { handleRegister, loading } = useAuth();
     const { control, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: { emailOrUsername: "", password: "" }
+        defaultValues: {
+            name: "",
+            surname: "",
+            username: "",
+            email: "",
+            password: "",
+            phone: ""
+        }
     });
 
     const onSubmit = async (data) => {
         try {
-            await handleLogin(data);
+            await handleRegister(data);
+            Alert.alert("Éxito", "Usuario registrado correctamente", [
+                { text: "OK", onPress: () => navigation.navigate("Login") }
+            ]);
         } catch (error) {
-            Alert.alert("Error", error.response?.data?.message || "Error al iniciar sesión");
+            Alert.alert("Error", error.response?.data?.message || "Error al registrar usuario");
         }
     };
 
@@ -41,27 +51,88 @@ const LoginScreen = ({ navigation }) => {
                 style={styles.container}
             >
                 <ScrollView contentContainerStyle={styles.scrollContent}>
-                    {/* Contenedor central (Tu "Card" de la imagen) */}
                     <View style={styles.card}>
                         <Image source={logo} style={styles.logo} resizeMode="contain" />
                         
-                        <Text style={styles.title}>Bienvenido</Text>
-                        <Text style={styles.subtitle}>Ingresa tus credenciales para continuar</Text>
+                        <Text style={styles.title}>Registro</Text>
+                        <Text style={styles.subtitle}>Crea una cuenta en Papa Luigi</Text>
 
                         <Controller
                             control={control}
-                            rules={{ required: "Email o usuario requerido" }}
+                            rules={{ required: "Nombre requerido" }}
                             render={({ field: { onChange, value } }) => (
                                 <Input
-                                    label="Email o Usuario"
+                                    label="Nombre"
+                                    placeholder="Juan"
+                                    onChangeText={onChange}
+                                    value={value}
+                                    error={errors.name?.message}
+                                />
+                            )}
+                            name="name"
+                        />
+
+                        <Controller
+                            control={control}
+                            rules={{ required: "Apellido requerido" }}
+                            render={({ field: { onChange, value } }) => (
+                                <Input
+                                    label="Apellido"
+                                    placeholder="Pérez"
+                                    onChangeText={onChange}
+                                    value={value}
+                                    error={errors.surname?.message}
+                                />
+                            )}
+                            name="surname"
+                        />
+
+                        <Controller
+                            control={control}
+                            rules={{ required: "Usuario requerido" }}
+                            render={({ field: { onChange, value } }) => (
+                                <Input
+                                    label="Usuario"
+                                    placeholder="juanp"
+                                    onChangeText={onChange}
+                                    value={value}
+                                    autoCapitalize="none"
+                                    error={errors.username?.message}
+                                />
+                            )}
+                            name="username"
+                        />
+
+                        <Controller
+                            control={control}
+                            rules={{ required: "Email requerido" }}
+                            render={({ field: { onChange, value } }) => (
+                                <Input
+                                    label="Email"
                                     placeholder="correo@ejemplo.com"
                                     onChangeText={onChange}
                                     value={value}
                                     autoCapitalize="none"
-                                    error={errors.emailOrUsername?.message}
+                                    error={errors.email?.message}
                                 />
                             )}
-                            name="emailOrUsername"
+                            name="email"
+                        />
+
+                        <Controller
+                            control={control}
+                            rules={{ required: "Teléfono requerido" }}
+                            render={({ field: { onChange, value } }) => (
+                                <Input
+                                    label="Teléfono"
+                                    placeholder="12345678"
+                                    onChangeText={onChange}
+                                    value={value}
+                                    keyboardType="phone-pad"
+                                    error={errors.phone?.message}
+                                />
+                            )}
+                            name="phone"
                         />
 
                         <Controller
@@ -82,14 +153,14 @@ const LoginScreen = ({ navigation }) => {
                         />
 
                         <Button
-                            title="Iniciar Sesión"
+                            title="Registrarse"
                             onPress={handleSubmit(onSubmit)}
                             loading={loading}
                             style={styles.button}
                         />
 
-                        <Text style={styles.link} onPress={() => navigation.navigate("Register")}>
-                            ¿Olvidaste tu contraseña?
+                        <Text style={styles.link} onPress={() => navigation.navigate("Login")}>
+                            ¿Ya tienes cuenta? Inicia Sesión
                         </Text>
                     </View>
                 </ScrollView>
@@ -113,10 +184,10 @@ const styles = StyleSheet.create({
         padding: SPACING.md,
     },
     card: {
-        backgroundColor: COLORS.card, // Color crema definido en tu theme
+        backgroundColor: COLORS.card,
         padding: SPACING.xl,
         borderRadius: 20,
-        ...SHADOWS.md, // Sombra definida en tu theme
+        ...SHADOWS.md,
         alignItems: "center",
     },
     logo: {
@@ -127,16 +198,16 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: "bold",
-        color: COLORS.error, // Rojo oscuro de tu paleta
+        color: COLORS.error,
         marginBottom: SPACING.xs,
     },
     subtitle: {
         fontSize: FONT_SIZE.sm,
-        color: "#166534", // Un tono verde oscuro según tu imagen
+        color: "#166534",
         marginBottom: SPACING.lg,
     },
     button: {
-        backgroundColor: COLORS.error, // Botón rojo según tu diseño
+        backgroundColor: COLORS.error,
         marginTop: SPACING.md,
     },
     link: {
@@ -146,4 +217,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoginScreen;
+export default RegisterScreen;

@@ -6,7 +6,6 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <AppNavigator />
-      <StatusBar sytle="auto" />
     </SafeAreaProvider>
   );
 }

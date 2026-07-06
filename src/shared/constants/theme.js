@@ -1,65 +1,45 @@
-import { useState } from "react";
-import { TextInput, View, Text, StyleSheet } from "react-native";
-import { COLORS, SPACING, FONT_SIZE } from "../constants/theme";
-
-const Input = ({ label, error, style, ...props }) => {
-    const [isFocused, setIsFocused] = useState(false);
-
-    return (
-        <View style={styles.container}>
-            {label && <Text style={styles.label}>{label}</Text>}
-            <TextInput
-                style={[
-                    styles.input,
-                    isFocused && styles.inputFocused, 
-                    error && styles.inputError,
-                    style
-                ]}
-                placeholderTextColor={COLORS.textLight}
-                onFocus={() => setIsFocused(true)}
-                onBlur={() => setIsFocused(false)}
-                {...props}
-            />
-            {error && <Text style={styles.errorText}>{error}</Text>}
-        </View>
-    );
+export const COLORS = {
+    primary: "#C00000", // Papa Luigi Red
+    secondary: "#166534", // Papa Luigi Green
+    background: "#F9F9F9",
+    surface: "#FFFFFF",
+    card: "#FFF8F0",
+    text: "#2C1506",
+    textLight: "#888888",
+    border: "#E0E0E0",
+    error: "#C00000",
+    success: "#2E7D32",
 };
 
-const styles = StyleSheet.create({
-    container: {
-        marginBottom: SPACING.md,
-        width: "100%",
-    },
-    label: {
-        fontSize: FONT_SIZE.sm,
-        fontWeight: "600",
-        color: COLORS.secondary,
-        marginBottom: SPACING.xs,
-    },
-    input: {
-        backgroundColor: COLORS.surface,
-        borderWidth: 1.5, // Ligeramente más grueso para mayor presencia
-        borderColor: COLORS.border,
-        borderRadius: 8,
-        paddingHorizontal: SPACING.md,
-        paddingVertical: SPACING.sm,
-        fontSize: FONT_SIZE.md,
-        color: COLORS.text,
-    },
-    inputFocused: {
-        borderColor: COLORS.primary, // Color café de Papas Luigi
-        borderWidth: 2,
-    },
-    inputError: {
-        borderColor: COLORS.error,
-        borderWidth: 2,
-    },
-    errorText: {
-        color: COLORS.error,
-        fontSize: FONT_SIZE.xs,
-        marginTop: SPACING.xs,
-        fontWeight: "500",
-    },
-});
+export const SPACING = {
+    xs: 4,
+    sm: 8,
+    md: 16,
+    lg: 24,
+    xl: 32,
+};
 
-export default Input;
+export const FONT_SIZE = {
+    xs: 12,
+    sm: 14,
+    md: 16,
+    lg: 18,
+    xl: 24,
+};
+
+export const SHADOWS = {
+    sm: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 1 },
+        shadowOpacity: 0.1,
+        shadowRadius: 2,
+        elevation: 2,
+    },
+    md: {
+        shadowColor: "#000",
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.15,
+        shadowRadius: 4,
+        elevation: 4,
+    },
+};

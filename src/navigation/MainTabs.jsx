@@ -5,13 +5,16 @@ import { COLORS, FONT_SIZE } from "../shared/constants/theme.js";
 import { MaterialIcons } from "@expo/vector-icons";
 
 // Screen imports
-import FieldsScreen from "../features/fields/screens/FieldsScreen.jsx";
+import MenuScreen from "../features/menu/screens/MenuScreen.jsx";
+import MenuDetailScreen from "../features/menu/screens/MenuDetailScreen.jsx";
+import CartScreen from "../features/cart/screens/CartScreen.jsx";
+import EventScreen from "../features/event/screens/EventScreen.jsx";
 import ProfileScreen from "../features/profile/screens/ProfileScreen.jsx";
-import FieldDetailScreen from "../features/fields/screens/FieldDetailScreen.jsx";
+
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
 
-const FieldsStack = () => (
+const MenuStack = () => (
     <Stack.Navigator
         screenOptions={{
             headerStyle: { backgroundColor: COLORS.surface },
@@ -19,8 +22,8 @@ const FieldsStack = () => (
             headerTitleStyle: { fontWeight: "bold" },
         }}
     >
-        <Stack.Screen name="FieldsList" component={FieldsScreen} options={{ title: "Canchas" }} />
-        <Stack.Screen name="FieldDetail" component={FieldDetailScreen} options={{ title: "Detalle" }} />
+        <Stack.Screen name="MenuList" component={MenuScreen} options={{ title: "Menú" }} />
+        <Stack.Screen name="MenuDetail" component={MenuDetailScreen} options={{ title: "Detalle del Platillo" }} />
     </Stack.Navigator>
 );
 
@@ -28,7 +31,10 @@ const MainTabs = () => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
-                headerShown: false, // Ocultamos header de tabs, usamos el del stack
+                headerShown: false, // Ocultamos header de tabs, usamos el del stack para Menú
+                headerStyle: { backgroundColor: COLORS.surface },
+                headerTintColor: COLORS.primary,
+                headerTitleStyle: { fontWeight: "bold" },
                 tabBarActiveTintColor: COLORS.primary,
                 tabBarInactiveTintColor: COLORS.secondary,
                 tabBarStyle: {
@@ -42,15 +48,19 @@ const MainTabs = () => {
                 tabBarLabelStyle: { fontSize: FONT_SIZE.xs, fontWeight: "600" },
                 tabBarIcon: ({ color, size }) => {
                     const icons = {
-                        Fields: "sports-soccer",
+                        Menu: "restaurant-menu",
+                        Cart: "shopping-cart",
+                        Events: "event",
                         Profile: "person",
                     };
                     return <MaterialIcons name={icons[route.name]} size={size} color={color} />;
                 },
             })}
         >
-            <Tab.Screen name="Fields" component={FieldsStack} options={{ title: "Canchas" }} />
-            <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: "Perfil" }} />
+            <Tab.Screen name="Menu" component={MenuStack} options={{ title: "Menú" }} />
+            <Tab.Screen name="Cart" component={CartScreen} options={{ title: "Carrito", headerShown: true }} />
+            <Tab.Screen name="Events" component={EventScreen} options={{ title: "Eventos", headerShown: true }} />
+            <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: "Perfil", headerShown: true }} />
         </Tab.Navigator>
     );
 };

@@ -26,7 +26,7 @@ const Button = ({
             style={[
                 styles.button,
                 styles[`button_${variant}`],
-                loading && styles.buttonDisabled,
+                loading ? styles.buttonDisabled : null,
                 style,
             ]}
             onPress={handlePress}

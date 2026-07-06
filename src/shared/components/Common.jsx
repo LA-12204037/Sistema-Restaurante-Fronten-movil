@@ -13,20 +13,24 @@ export const EmptyState = ({ message = "No hay datos disponibles" }) => (
     </View>
 );
 
-// Card ahora admite un 'onPress' opcional para ser interactiva
 export const Card = ({ children, style, onPress, ...props }) => {
-    const CardComponent = onPress ? Pressable : View;
+    if (onPress) {
+        return (
+            <Pressable 
+                style={[styles.card, style]} 
+                onPress={onPress}
+                android_ripple={{ color: COLORS.border }} 
+                {...props}
+            >
+                {children}
+            </Pressable>
+        );
+    }
     
     return (
-        <CardComponent 
-            style={[styles.card, style]} 
-            onPress={onPress}
-            // Feedback visual al presionar si es interactiva
-            android_ripple={{ color: COLORS.border }} 
-            {...props}
-        >
+        <View style={[styles.card, style]} {...props}>
             {children}
-        </CardComponent>
+        </View>
     );
 };
 
