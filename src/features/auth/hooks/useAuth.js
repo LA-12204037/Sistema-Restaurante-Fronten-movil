@@ -16,8 +16,14 @@ export const useAuth = () => {
             setError(null);
             
             // Hacemos el post al endpoint de login
-            const response = await authClient.post("/login", data);
+            // Enviamos requires2FA en true para la app móvil
+            const response = await authClient.post("/login", { ...data, requires2FA: true });
             
+            // Si requiere 2FA, no logueamos aún
+            if (response.data.requiresTwoFactor) {
+                return response.data;
+            }
+
             // Asumiendo que tu backend unifica la respuesta:
             const { accessToken, refreshToken, userDetails } = response.data;
 
@@ -37,9 +43,19 @@ export const useAuth = () => {
             setLoading(true);
             setError(null);
 
-            // Si el backend espera JSON, no necesitamos FormData, a menos que envíes archivos.
-            // Si es solo registro de usuario, esto es mucho más limpio:
-            const response = await authClient.post("/register", data);
+            // El backend requiere multipart/form-data por el [FromForm]
+            const formData = new FormData();
+            Object.keys(data).forEach(key => {
+                if (data[key] !== undefined && data[key] !== null) {
+                    formData.append(key, data[key]);
+                }
+            });
+
+            const response = await authClient.post("/register", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                }
+            });
 
             return response.data;
         } catch (err) {
@@ -50,5 +66,25 @@ export const useAuth = () => {
         }
     };
 
-    return { handleLogin, handleRegister, loading, error, logout };
+    const handleVerifyLogin = async (data) => {
+        try {
+            setLoading(true);
+            setError(null);
+            
+            const response = await authClient.post("/verify-login", data);
+            
+            // Asumiendo respuesta unificada:
+            const { accessToken, refreshToken, userDetails } = response.data;
+
+            await login(accessToken, userDetails, refreshToken);
+            return response.data;
+        } catch (err) {
+            setError(err.response?.data?.message || "Código inválido");
+            throw err;
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    return { handleLogin, handleRegister, handleVerifyLogin, loading, error, logout };
 };

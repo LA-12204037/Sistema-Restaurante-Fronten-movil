@@ -1,3 +1,4 @@
+import React from "react";
 import {
     View,
     Text,
@@ -7,7 +8,7 @@ import {
     Platform,
     ScrollView,
     Alert,
-    ImageBackground // 1. Importamos ImageBackground
+    ImageBackground
 } from "react-native";
 
 import { useForm, Controller } from "react-hook-form";
@@ -16,25 +17,22 @@ import Input from "../../../shared/components/Input";
 import Button from "../../../shared/components/Button";
 import { useAuth } from "../hooks/useAuth";
 
-// Importamos tus nuevos assets
 import logo from "../../../../assets/logo.png";
 import fondo from "../../../../assets/loginfondo.png";
 
-const LoginScreen = ({ navigation }) => {
-    const { handleLogin, loading } = useAuth();
+const VerifyLoginScreen = ({ navigation, route }) => {
+    const email = route.params?.email || "";
+    const { handleVerifyLogin, loading } = useAuth();
     const { control, handleSubmit, formState: { errors } } = useForm({
-        defaultValues: { emailOrUsername: "", password: "" }
+        defaultValues: { code: "" }
     });
 
     const onSubmit = async (data) => {
         try {
-            const response = await handleLogin(data);
-            if (response?.requiresTwoFactor) {
-                // Navigate to VerifyLogin screen passing the email
-                navigation.navigate("VerifyLogin", { email: data.emailOrUsername });
-            }
+            await handleVerifyLogin({ email, code: data.code });
+            // The useAuth hook will automatically update the store and navigate
         } catch (error) {
-            Alert.alert("Error", error.response?.data?.message || "Error al iniciar sesión");
+            Alert.alert("Error", error.response?.data?.message || "Código inválido");
         }
     };
 
@@ -48,51 +46,34 @@ const LoginScreen = ({ navigation }) => {
                     <View style={styles.card}>
                         <Image source={logo} style={styles.logo} resizeMode="contain" />
                         
-                        <Text style={styles.title}>Bienvenido</Text>
-                        <Text style={styles.subtitle}>Ingresa tus credenciales para continuar</Text>
+                        <Text style={styles.title}>Verificación</Text>
+                        <Text style={styles.subtitle}>Ingresa el código enviado a tu correo</Text>
 
                         <Controller
                             control={control}
-                            rules={{ required: "Email o usuario requerido" }}
+                            rules={{ required: "Código requerido", minLength: { value: 6, message: "El código debe tener 6 dígitos" } }}
                             render={({ field: { onChange, value } }) => (
                                 <Input
-                                    label="Email o Usuario"
-                                    placeholder="correo@ejemplo.com"
+                                    label="Código de Verificación"
+                                    placeholder="123456"
+                                    keyboardType="numeric"
                                     onChangeText={onChange}
                                     value={value}
-                                    autoCapitalize="none"
-                                    error={errors.emailOrUsername?.message}
+                                    error={errors.code?.message}
                                 />
                             )}
-                            name="emailOrUsername"
-                        />
-
-                        <Controller
-                            control={control}
-                            rules={{ required: "Contraseña requerida" }}
-                            render={({ field: { onChange, value } }) => (
-                                <Input
-                                    label="Contraseña"
-                                    placeholder="••••••••"
-                                    secureTextEntry={true}
-                                    onChangeText={onChange}
-                                    value={value}
-                                    autoCapitalize="none"
-                                    error={errors.password?.message}
-                                />
-                            )}
-                            name="password"
+                            name="code"
                         />
 
                         <Button
-                            title="Iniciar Sesión"
+                            title="Verificar"
                             onPress={handleSubmit(onSubmit)}
                             loading={loading}
                             style={styles.button}
                         />
 
-                        <Text style={styles.link} onPress={() => navigation.navigate("Register")}>
-                            ¿Olvidaste tu contraseña?
+                        <Text style={styles.link} onPress={() => navigation.goBack()}>
+                            Volver al Login
                         </Text>
                     </View>
                 </ScrollView>
@@ -116,10 +97,10 @@ const styles = StyleSheet.create({
         padding: SPACING.md,
     },
     card: {
-        backgroundColor: COLORS.card, // Color crema definido en tu theme
+        backgroundColor: COLORS.card,
         padding: SPACING.xl,
         borderRadius: 20,
-        ...SHADOWS.md, // Sombra definida en tu theme
+        ...SHADOWS.md,
         alignItems: "center",
     },
     logo: {
@@ -130,16 +111,17 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: "bold",
-        color: COLORS.error, // Rojo oscuro de tu paleta
+        color: COLORS.error,
         marginBottom: SPACING.xs,
     },
     subtitle: {
         fontSize: FONT_SIZE.sm,
-        color: "#166534", // Un tono verde oscuro según tu imagen
+        color: "#166534",
         marginBottom: SPACING.lg,
+        textAlign: "center"
     },
     button: {
-        backgroundColor: COLORS.error, // Botón rojo según tu diseño
+        backgroundColor: COLORS.error,
         marginTop: SPACING.md,
     },
     link: {
@@ -149,4 +131,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default LoginScreen;
+export default VerifyLoginScreen;
