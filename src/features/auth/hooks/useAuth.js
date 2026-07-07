@@ -15,9 +15,9 @@ export const useAuth = () => {
             setLoading(true);
             setError(null);
 
-            // Hacemos el post al endpoint de login
+            // Hacemos el post al endpoint de login con la ruta completa
             // Enviamos requires2FA en true para la app móvil
-            const response = await authClient.post("/login", { ...data, requires2FA: true });
+            const response = await authClient.post(`${process.env.EXPO_PUBLIC_AUTH_URL}/api/v1/auth/login`, { ...data, requires2FA: true });
 
             // Si requiere 2FA, no logueamos aún
             if (response.data.requiresTwoFactor) {
@@ -74,7 +74,7 @@ export const useAuth = () => {
             setLoading(true);
             setError(null);
 
-            const response = await authClient.post("/verify-login", data);
+            const response = await authClient.post(`${process.env.EXPO_PUBLIC_AUTH_URL}/api/v1/auth/verify-login`, data);
 
             // Asumiendo respuesta unificada:
             const { accessToken, refreshToken, userDetails } = response.data;
@@ -82,6 +82,7 @@ export const useAuth = () => {
             await login(accessToken, userDetails, refreshToken);
             return response.data;
         } catch (err) {
+            console.log("ERROR VERIFY LOGIN:", JSON.stringify(err.response?.data, null, 2));
             setError(err.response?.data?.message || "Código inválido");
             throw err;
         } finally {

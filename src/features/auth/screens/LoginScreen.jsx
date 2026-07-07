@@ -30,8 +30,9 @@ const LoginScreen = ({ navigation }) => {
         try {
             const response = await handleLogin(data);
             if (response?.requiresTwoFactor) {
-                // Navigate to VerifyLogin screen passing the email
-                navigation.navigate("VerifyLogin", { email: data.emailOrUsername });
+                // Navigate to VerifyLogin screen passing the email real del usuario
+                const userEmail = response.userDetails?.email || data.emailOrUsername;
+                navigation.navigate("VerifyLogin", { email: userEmail });
             }
         } catch (error) {
             Alert.alert("Error", error.response?.data?.message || "Error al iniciar sesión");

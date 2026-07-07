@@ -29,7 +29,7 @@ const VerifyLoginScreen = ({ navigation, route }) => {
 
     const onSubmit = async (data) => {
         try {
-            await handleVerifyLogin({ email, code: data.code });
+            await handleVerifyLogin({ email, code: parseInt(data.code, 10) });
             // The useAuth hook will automatically update the store and navigate
         } catch (error) {
             Alert.alert("Error", error.response?.data?.message || "Código inválido");
