@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import { COLORS, SPACING, FONT_SIZE } from "../../../shared/constants/theme";
 import Button from "../../../shared/components/Button";
 
+import { useCartStore } from "../../../shared/store/cartStore";
+
 const getPhotoUrl = (photo) => {
     if (!photo) return null;
     if (photo.startsWith("http")) return photo;
@@ -11,10 +13,11 @@ const getPhotoUrl = (photo) => {
 
 const MenuDetailScreen = ({ route, navigation }) => {
     const { menuItem } = route.params;
+    const { addToCart } = useCartStore();
 
     const handleAddToCart = () => {
-        // En el futuro, aquí se añade el platillo al carrito.
-        alert("Añadido al carrito!");
+        addToCart(menuItem, 1);
+        alert("¡Platillo añadido a tu carrito! Puedes seguir agregando más.");
     };
 
     return (

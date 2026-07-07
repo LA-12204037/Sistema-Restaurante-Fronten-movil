@@ -3,22 +3,23 @@ import axios from "axios";
 import { ENDPOINTS } from "../constants/endpoints";
 import { useAuthStore } from "./authStore";
 
-export const useEventStore = create((set, get) => ({
-    events: [],
+export const useTableStore = create((set, get) => ({
+    tables: [],
     loading: false,
     error: null,
 
-    getEvents: async () => {
+    getTables: async () => {
         set({ loading: true, error: null });
         try {
             const token = useAuthStore.getState().token;
-            const response = await axios.get(`${ENDPOINTS.PAPALUIGI}/event`, {
+            const response = await axios.get(`${ENDPOINTS.PAPALUIGI}/table`, {
                 headers: { Authorization: `Bearer ${token}` }
             });
-            set({ events: response.data.events || response.data.data || response.data || [], loading: false });
+            // Adaptar para el formato del backend (podría estar en data.data)
+            set({ tables: response.data.data || response.data || [], loading: false });
         } catch (error) {
             set({ 
-                error: error.response?.data?.message || "Error al obtener eventos", 
+                error: error.response?.data?.message || "Error al obtener mesas", 
                 loading: false 
             });
         }

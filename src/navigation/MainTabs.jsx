@@ -10,6 +10,8 @@ import MenuDetailScreen from "../features/menu/screens/MenuDetailScreen.jsx";
 import CartScreen from "../features/cart/screens/CartScreen.jsx";
 import EventScreen from "../features/event/screens/EventScreen.jsx";
 import ProfileScreen from "../features/profile/screens/ProfileScreen.jsx";
+import ReservationScreen from "../features/reservation/screens/ReservationScreen.jsx";
+import CreateReservationScreen from "../features/reservation/screens/CreateReservationScreen.jsx";
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator();
@@ -27,11 +29,24 @@ const MenuStack = () => (
     </Stack.Navigator>
 );
 
+const ReservationStack = () => (
+    <Stack.Navigator
+        screenOptions={{
+            headerStyle: { backgroundColor: COLORS.surface },
+            headerTintColor: COLORS.primary,
+            headerTitleStyle: { fontWeight: "bold" },
+        }}
+    >
+        <Stack.Screen name="ReservationList" component={ReservationScreen} options={{ title: "Reservaciones" }} />
+        <Stack.Screen name="CreateReservation" component={CreateReservationScreen} options={{ title: "Nueva Reserva" }} />
+    </Stack.Navigator>
+);
+
 const MainTabs = () => {
     return (
         <Tab.Navigator
             screenOptions={({ route }) => ({
-                headerShown: false, // Ocultamos header de tabs, usamos el del stack para Menú
+                headerShown: false, // Ocultamos header de tabs, usamos el del stack para Menú y Reservaciones
                 headerStyle: { backgroundColor: COLORS.surface },
                 headerTintColor: COLORS.primary,
                 headerTitleStyle: { fontWeight: "bold" },
@@ -51,6 +66,7 @@ const MainTabs = () => {
                         Menu: "restaurant-menu",
                         Cart: "shopping-cart",
                         Events: "event",
+                        Reservations: "book-online",
                         Profile: "person",
                     };
                     return <MaterialIcons name={icons[route.name]} size={size} color={color} />;
@@ -60,6 +76,7 @@ const MainTabs = () => {
             <Tab.Screen name="Menu" component={MenuStack} options={{ title: "Menú" }} />
             <Tab.Screen name="Cart" component={CartScreen} options={{ title: "Carrito", headerShown: true }} />
             <Tab.Screen name="Events" component={EventScreen} options={{ title: "Eventos", headerShown: true }} />
+            <Tab.Screen name="Reservations" component={ReservationStack} options={{ title: "Reservas" }} />
             <Tab.Screen name="Profile" component={ProfileScreen} options={{ title: "Perfil", headerShown: true }} />
         </Tab.Navigator>
     );
