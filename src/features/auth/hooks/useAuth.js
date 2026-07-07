@@ -5,7 +5,7 @@ import { useAuthStore } from "../../../shared/store/authStore.js";
 export const useAuth = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    
+
     // Obtenemos las funciones desde el store
     const login = useAuthStore((state) => state.login);
     const logout = useAuthStore((state) => state.logout);
@@ -14,11 +14,11 @@ export const useAuth = () => {
         try {
             setLoading(true);
             setError(null);
-            
+
             // Hacemos el post al endpoint de login
             // Enviamos requires2FA en true para la app móvil
             const response = await authClient.post("/login", { ...data, requires2FA: true });
-            
+
             // Si requiere 2FA, no logueamos aún
             if (response.data.requiresTwoFactor) {
                 return response.data;
@@ -43,7 +43,6 @@ export const useAuth = () => {
             setLoading(true);
             setError(null);
 
-            // El backend requiere multipart/form-data por el [FromForm]
             const formData = new FormData();
             Object.keys(data).forEach(key => {
                 if (data[key] !== undefined && data[key] !== null) {
@@ -51,11 +50,15 @@ export const useAuth = () => {
                 }
             });
 
-            const response = await authClient.post("/register", formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
+            const response = await authClient.post(
+                `${process.env.EXPO_PUBLIC_AUTH_URL}/api/v1/auth/register`,
+                formData,
+                {
+                    headers: {
+                        'Content-Type': 'multipart/form-data',
+                    }
                 }
-            });
+            );
 
             return response.data;
         } catch (err) {
@@ -70,9 +73,9 @@ export const useAuth = () => {
         try {
             setLoading(true);
             setError(null);
-            
+
             const response = await authClient.post("/verify-login", data);
-            
+
             // Asumiendo respuesta unificada:
             const { accessToken, refreshToken, userDetails } = response.data;
 
